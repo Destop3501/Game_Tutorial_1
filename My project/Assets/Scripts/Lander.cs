@@ -26,7 +26,7 @@ public class Lander : MonoBehaviour
             landerRigidbody2D.AddTorque(-rotation * Time.deltaTime);
         }
         if (Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed){
-            Debug.Log("up");
+            Debug.Log("down");
         }
     }
 }
