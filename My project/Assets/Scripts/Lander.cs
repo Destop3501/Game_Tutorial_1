@@ -29,4 +29,24 @@ public class Lander : MonoBehaviour
             Debug.Log("down");
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision2D)
+    {
+        float softHandlling = 4f;
+        if (collision2D.relativeVelocity.magnitude > softHandlling)
+        {
+            Debug.Log("You Crashed");
+            return;
+        }
+
+        float dotVecter2D = Vector2.Dot(Vector2.up, transform.up);
+        float minDotVector = 0.95f;
+        if (dotVecter2D < minDotVector)
+        {
+            Debug.Log("You Crashed");
+            Debug.Log(dotVecter2D);
+            return;
+        }
+        Debug.Log("You Landed");
+        Debug.Log(dotVecter2D);
+    }
 }
