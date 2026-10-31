@@ -1,8 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Lander : MonoBehaviour
 {
+    public event EventHandler OnUpForce;
+    public event EventHandler OnLeftForce;
+    public event EventHandler OnRightForce;
+    public event EventHandler OnBeforeForce;
 
     private Rigidbody2D landerRigidbody2D;
     protected float upwordforce = 1000f;
@@ -17,14 +22,18 @@ public class Lander : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
+        OnBeforeForce?.Invoke(this, EventArgs.Empty);
         if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed){
             landerRigidbody2D.AddForce(upwordforce * transform.up * Time.deltaTime);
+            OnUpForce?.Invoke(this, EventArgs.Empty);
         }
         if (Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed){
             landerRigidbody2D.AddTorque(+rotation * Time.deltaTime);
+            OnLeftForce?.Invoke(this, EventArgs.Empty);
         }
         if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed){
             landerRigidbody2D.AddTorque(-rotation * Time.deltaTime);
+            OnRightForce?.Invoke(this, EventArgs.Empty);
         }
         if (Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed){
             Debug.Log("down");
