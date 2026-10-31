@@ -7,6 +7,7 @@ public class Lander : MonoBehaviour
     private Rigidbody2D landerRigidbody2D;
     protected float upwordforce = 1000f;
     protected float rotation = 100;
+    private LandingPad landPad;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -31,12 +32,15 @@ public class Lander : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision2D)
     {
-        if (collision2D.gameObject.name == "LandingPad")
+        landPad = collision2D.gameObject.GetComponent<LandingPad>();
+        if (collision2D.gameObject.tag != "LandingPad")
         {
-            Debug.Log("You Landed");
+            Debug.Log("Crashed");
+            return;
         }
-        float softHandlling = 4f;
-        if (collision2D.relativeVelocity.magnitude > softHandlling)
+        float softHandling = 4f;
+        float relativeVelocity = collision2D.relativeVelocity.magnitude;
+        if (relativeVelocity > softHandling)
         {
             Debug.Log("You Crashed");
             return;
@@ -50,7 +54,15 @@ public class Lander : MonoBehaviour
             Debug.Log(dotVecter2D);
             return;
         }
-        Debug.Log("You Landed");
-        Debug.Log(dotVecter2D);
+
+        float MaxScoreLandingAmount = 100f;
+        float scoreDotVectorMultiplier = 10f;
+        float LandingAnglescore = MaxScoreLandingAmount - Mathf.Abs(dotVecter2D - 1f) * scoreDotVectorMultiplier * MaxScoreLandingAmount;
+
+        float MaxScoreLandingSpeed = 100f;
+        float LandingSpeedScore = (softHandling - relativeVelocity) * MaxScoreLandingSpeed;
+
+        int score = Mathf.RoundToInt((LandingAnglescore + LandingSpeedScore) * landPad.getScoreMutifier());
+        Debug.Log("You Landed Successfully with a score of: " + score);
     }
 }
