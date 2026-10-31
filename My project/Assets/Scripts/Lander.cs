@@ -31,6 +31,10 @@ public class Lander : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision2D)
     {
+        if (collision2D.gameObject.name == "LandingPad")
+        {
+            Debug.Log("You Landed");
+        }
         float softHandlling = 4f;
         if (collision2D.relativeVelocity.magnitude > softHandlling)
         {
